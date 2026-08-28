@@ -6,7 +6,7 @@ Projet personnel d'infrastructure systèmes et réseaux multi-sites, réalisé s
 **Périmètre :** siège + agence Basket + agence Équitation  
 **Objectif :** concevoir, déployer, superviser et durcir une infrastructure virtualisée cohérente, avec services Windows/Linux, VPN inter-sites, inventaire, supervision et centralisation des logs.
 
-> Ce dépôt est une version publique et assainie du lab. Les secrets, clés privées, mots de passe, communautés SNMP réelles et exports de configuration sensibles ne sont pas publiés.
+> Ce dépôt est une version publique. Les secrets, clés privées, mots de passe, communautés SNMP réelles et exports de configuration sensibles ne sont pas publiés.
 
 ## Vue d'ensemble
 
