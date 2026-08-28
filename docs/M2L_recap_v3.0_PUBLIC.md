@@ -1,8 +1,8 @@
-# LAB M2L - Récapitulatif final v3.0
+# LAB M2L
 
 **Date : 28/08/2026**  
 **État : PROJET TERMINÉ - 7/7 sprints - 100 %**  
-**Documentation complète : conservée hors dépôt public ; ce fichier constitue le récapitulatif assaini.**
+**Documentation complète**
 
 ## 1. Architecture finale
 
@@ -16,8 +16,6 @@
 - VMnet8 - DMZ Équitation - `172.18.1.0/24`
 - VMnet9 - LAN Équitation - `172.31.72.32/27`
 - OpenVPN - `10.255.0.0/24`
-
-Aucun chevauchement IPv4 n'est présent entre les réseaux de référence. Aucun NAT inter-sites n'est utilisé.
 
 ## 2. Siège
 
@@ -82,7 +80,6 @@ DNS : `192.168.10.17`, `192.168.10.19` ; suffixe : `m2l.local`.
 
 - Poller Central : `192.168.10.60`.
 - ICMP + SNMP v2c vers pfSense / Admin / SQUID des deux agences.
-- SQUID-Equitation : Swap en WARNING ~10,41 %, non bloquant.
 
 ## 9. Graylog
 
@@ -104,9 +101,7 @@ DNS : `192.168.10.17`, `192.168.10.19` ; suffixe : `m2l.local`.
 
 1. VMware NAT / DNS : redémarrer `VMnetNat` avant de modifier la configuration DNS lorsque l'ICMP fonctionne mais pas les requêtes DNS externes.
 2. DHCP relay + OpenVPN TUN : le relais pfSense ne peut pas utiliser `ovpnc1`; utiliser `isc-dhcp-relay` sur l'Admin local.
-3. Vérifier les alias et adresses sources des règles firewall : erreurs corrigées sur `BASKET_DMZ`, GLPI Équitation et Centreon.
-4. Ne pas assigner temporairement `ovpnc1` comme interface sans nécessité : une reconnexion OpenVPN peut être requise pour restaurer les routes.
-5. Vérifier qu'une VM/service cible est démarré avant de conclure à une panne réseau.
+3. Vérifier qu'une VM/service cible est démarré avant de conclure à une panne réseau.
 
 ## 12. Clôture
 
@@ -119,13 +114,3 @@ DNS : `192.168.10.17`, `192.168.10.19` ; suffixe : `m2l.local`.
 - Snapshots finaux : réalisés sur l'ensemble des VMs.
 
 **Projet M2L techniquement terminé et figé.**
-
-## 13. Schémas publics
-
-Les schémas versionnés et lisibles directement sur GitHub sont disponibles dans [`docs/diagrams/README.md`](diagrams/README.md) au format Mermaid :
-
-- architecture globale ;
-- OpenVPN hub-and-spoke ;
-- flux principaux durcis.
-
-Les exports haute résolution PNG/SVG sont conservés avec la documentation complète du projet.
