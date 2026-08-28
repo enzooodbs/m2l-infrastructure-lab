@@ -1,0 +1,44 @@
+# Secrets / certificats
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.ovpn
+*.env
+.env.*
+
+# Exports de configuration sensibles
+config.xml
+*config-backup*.xml
+*.bak
+*.backup
+
+# Logs / dumps
+*.log
+*.dmp
+*.dump
+*.sql
+
+# Archives et images disque
+*.zip
+*.7z
+*.rar
+*.iso
+*.vmdk
+*.vmem
+*.vmsn
+*.vmss
+*.nvram
+
+# VMware
+*.lck
+*.vmxf
+*.vmsd
+
+# OS / éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
