@@ -2,7 +2,7 @@
 
 **Date : 28/08/2026**  
 **État : PROJET TERMINÉ - 7/7 sprints - 100 %**  
-**Référence : LAB_M2L_Reference_v3.0_FINAL_2026-08-28.docx**
+**Documentation complète : conservée hors dépôt public ; ce fichier constitue le récapitulatif assaini.**
 
 ## 1. Architecture finale
 
@@ -120,10 +120,12 @@ DNS : `192.168.10.17`, `192.168.10.19` ; suffixe : `m2l.local`.
 
 **Projet M2L techniquement terminé et figé.**
 
-## 13. Schémas v3.0 associés
+## 13. Schémas publics
 
-- `M2L_Architecture_Globale_v3.0_FINAL.png/.svg`
-- `M2L_Agence_Basket_v3.0_FINAL.png/.svg`
-- `M2L_Agence_Equitation_v3.0_FINAL.png/.svg`
-- `M2L_OpenVPN_HubSpoke_v3.0_FINAL.png/.svg`
-- `M2L_Flux_Durcis_v3.0_FINAL.png/.svg`
+Les schémas versionnés et lisibles directement sur GitHub sont disponibles dans [`docs/diagrams/README.md`](diagrams/README.md) au format Mermaid :
+
+- architecture globale ;
+- OpenVPN hub-and-spoke ;
+- flux principaux durcis.
+
+Les exports haute résolution PNG/SVG sont conservés avec la documentation complète du projet.
