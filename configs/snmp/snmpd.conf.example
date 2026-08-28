@@ -1,0 +1,5 @@
+# Exemple public - remplacer COMMUNAUTE_SNMP avant usage.
+agentAddress udp:161
+rocommunity COMMUNAUTE_SNMP 192.168.10.60
+sysLocation LAB-M2L
+sysContact Administrateur
