@@ -2,7 +2,7 @@
 
 Projet personnel d'infrastructure systèmes et réseaux multi-sites, réalisé sous VMware Workstation et documenté de bout en bout.
 
-**Statut :** terminé - 7/7 sprints - 100 %  
+**Statut :** terminé — 7/7 sprints — 100 %  
 **Périmètre :** siège + agence Basket + agence Équitation  
 **Objectif :** concevoir, déployer, superviser et durcir une infrastructure virtualisée cohérente, avec services Windows/Linux, VPN inter-sites, inventaire, supervision et centralisation des logs.
 
@@ -10,11 +10,56 @@ Projet personnel d'infrastructure systèmes et réseaux multi-sites, réalisé s
 
 ## Vue d'ensemble
 
-![Architecture globale M2L](docs/diagrams/M2L_Architecture_Globale_v3.0_FINAL.png)
+```mermaid
+flowchart TB
+    Internet((Internet)) --> NAT[VMnet5 — NAT VMware<br/>172.16.0.0/16]
 
-L'architecture repose sur un **hub OpenVPN au siège** et deux agences distantes. Le routage inter-sites est effectué sans NAT entre les sites. Les services centraux restent au siège et les agences consomment ces services via le tunnel.
+    subgraph SIEGE[Siège M2L]
+        HUB[pfSense-Siege<br/>Hub OpenVPN]
+        DC[DC1 / DC2<br/>AD DS · DNS · DHCP]
+        GLPI[GLPI<br/>192.168.10.58]
+        CENTREON[Centreon<br/>192.168.10.60]
+        GRAYLOG[Graylog<br/>192.168.10.20]
+        FILES[Srv-Fich + NAS]
+        HUB --> DC
+        HUB --> GLPI
+        HUB --> CENTREON
+        HUB --> GRAYLOG
+        HUB --> FILES
+    end
 
-### Points techniques couverts
+    subgraph BASKET[Agence Basket]
+        PFB[pfSense-Basket<br/>10.255.0.2]
+        BCLT[CLT-Basket<br/>172.31.72.2]
+        BADMIN[Admin-Basket<br/>172.31.72.28]
+        BSQ[Squid-Basket<br/>172.17.72.1:3128]
+        PFB --> BCLT
+        PFB --> BADMIN
+        PFB --> BSQ
+    end
+
+    subgraph EQUI[Agence Équitation]
+        PFE[pfSense-Equitation<br/>10.255.0.3]
+        ECLT[CLT-Equitation<br/>172.31.72.34]
+        EADMIN[Admin-Equitation<br/>172.31.72.60]
+        ESQ[Squid-Equitation<br/>172.18.1.1:3128]
+        PFE --> ECLT
+        PFE --> EADMIN
+        PFE --> ESQ
+    end
+
+    NAT --> HUB
+    NAT --> PFB
+    NAT --> PFE
+    HUB == OpenVPN 10.255.0.0/24 ==> PFB
+    HUB == OpenVPN 10.255.0.0/24 ==> PFE
+```
+
+L'architecture repose sur un **hub OpenVPN au siège** et deux agences distantes. Le routage inter-sites est effectué sans NAT entre les sites. Les services centraux restent au siège et les agences les consomment via le tunnel.
+
+[Voir les diagrammes GitHub natifs](docs/diagrams/README.md)
+
+## Compétences et technologies mises en œuvre
 
 - Active Directory Domain Services, DNS et DHCP sous Windows Server 2022
 - segmentation réseau et filtrage avec pfSense CE 2.9.0
@@ -46,24 +91,6 @@ L'architecture repose sur un **hub OpenVPN au siège** et deux agences distantes
 
 Les adresses sont exclusivement des plages privées utilisées dans le lab.
 
-## Schémas
-
-### Agence Basket
-
-![Agence Basket](docs/diagrams/M2L_Agence_Basket_v3.0_FINAL.png)
-
-### Agence Équitation
-
-![Agence Équitation](docs/diagrams/M2L_Agence_Equitation_v3.0_FINAL.png)
-
-### OpenVPN hub-and-spoke
-
-![OpenVPN hub-and-spoke](docs/diagrams/M2L_OpenVPN_HubSpoke_v3.0_FINAL.png)
-
-### Flux durcis
-
-![Flux durcis](docs/diagrams/M2L_Flux_Durcis_v3.0_FINAL.png)
-
 ## Services principaux
 
 | Service | Technologies | Rôle dans le lab |
@@ -82,7 +109,7 @@ Les adresses sont exclusivement des plages privées utilisées dans le lab.
 
 Quelques choix illustrés dans le projet :
 
-- pas de NAT entre les sites ;
+- aucun NAT entre les sites ;
 - flux OpenVPN limités aux besoins identifiés ;
 - Web direct TCP/80-443 bloqué depuis les LAN agences ;
 - navigation autorisée via Squid TCP/3128 ;
@@ -108,20 +135,13 @@ Les tests finaux ont validé :
 
 ## Documentation
 
-- [Récapitulatif final](docs/M2L_recap_v3.0_PUBLIC.md)
-- [Documentation de référence - PDF](docs/reference/LAB_M2L_Reference_v3.0_PUBLIC.pdf)
-- [Documentation de référence - DOCX](docs/reference/LAB_M2L_Reference_v3.0_PUBLIC.docx)
-- [Diagrammes PNG/SVG](docs/diagrams/)
-
-## Exemples de configuration
-
-Le dépôt contient uniquement des **exemples assainis**, pas les exports de production du lab :
-
-- [`configs/glpi-agent/`](configs/glpi-agent/) : `httpd-trust` et pare-feu Windows ciblé ;
-- [`configs/snmp/`](configs/snmp/) : exemple `snmpd.conf` sans communauté réelle ;
-- [`configs/pfsense/`](configs/pfsense/) : matrice de règles et principes de filtrage ;
-- [`configs/openvpn/`](configs/openvpn/) : paramètres d'architecture sans certificats ni clés ;
-- [`scripts/`](scripts/) : exemple de sauvegarde Srv-Fich vers NAS.
+- [Récapitulatif final public](docs/M2L_recap_v3.0_PUBLIC.md)
+- [Diagrammes d'architecture Mermaid](docs/diagrams/README.md)
+- [`configs/glpi-agent/`](configs/glpi-agent/) — `httpd-trust` et pare-feu Windows ciblé
+- [`configs/snmp/`](configs/snmp/) — exemple `snmpd.conf` assaini
+- [`configs/pfsense/`](configs/pfsense/) — matrice de règles et principes de filtrage
+- [`configs/openvpn/`](configs/openvpn/) — paramètres d'architecture sans certificats ni clés
+- [`scripts/`](scripts/) — exemple de sauvegarde Srv-Fich vers NAS
 
 ## Incidents et enseignements
 
@@ -133,7 +153,7 @@ Quelques problèmes réellement rencontrés et résolus :
 - route OpenVPN temporairement perdue après assignation manuelle de l'interface tunnel ;
 - faux diagnostics causés par des VMs/services simplement arrêtés.
 
-Ces incidents sont détaillés dans la documentation de référence.
+Ces incidents sont détaillés dans le récapitulatif public et dans la documentation complète du projet.
 
 ## Arborescence
 
@@ -145,7 +165,6 @@ Ces incidents sont détaillés dans la documentation de référence.
 ├── .gitignore
 ├── docs/
 │   ├── M2L_recap_v3.0_PUBLIC.md
-│   ├── reference/
 │   └── diagrams/
 ├── configs/
 │   ├── glpi-agent/
